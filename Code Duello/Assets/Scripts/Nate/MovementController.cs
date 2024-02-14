@@ -8,13 +8,15 @@ public class MovementController : MonoBehaviour
     [Space][Header("Attacks")][Space]
     Animator controllerAnim;
 
+    public CombatClass playerCombatClass;
+
     public bool isBlocking;
     public bool isPunching;
 
     [SerializeField] private AnimationClip punchClip;
     [SerializeField] private float punchClipTime;
 
-
+    [SerializeField] private float hitCheckDelay;
 
     [Space][Header("CharacterController")][Space]
 
@@ -51,6 +53,7 @@ public class MovementController : MonoBehaviour
             isPunching = true;
             Attack();
             Invoke("makePunchingFalse", punchClipTime);
+            Invoke("SendHitCheck", hitCheckDelay);
         }
         if (Input.GetButton("Fire2") && !isPunching)
         {
@@ -72,9 +75,10 @@ public class MovementController : MonoBehaviour
         }
 
         float x = Input.GetAxis("Horizontal");
-        
-        move = transform.forward * x ;
+        float z = 0;
 
+        move = transform.forward * x ;
+        move.z = z;
         if(x < -0.3 && isGrounded && !isPunching) 
         {
             WalkLeft();
@@ -132,6 +136,11 @@ public class MovementController : MonoBehaviour
     public void makePunchingFalse() 
     {
         isPunching = false;
+    }
+
+    public void SendHitCheck() 
+    {
+        playerCombatClass.DamageHitCkeck();
     }
 
     public void SetBlocking()
