@@ -2701,10 +2701,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3445245d8bfa2e24897abae0d34bb85e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitCastPoint: {fileID: 0}
+  isEnemyInRange: 0
+  hitRange: 10
+  playerCombatClass: {fileID: 0}
   isBlocking: 0
   isPunching: 0
   punchClip: {fileID: 7400000, guid: 34d15b4ddd774044ba28605eae00a0ca, type: 2}
-  punchClipTime: 0
+  punchClipTime: 0.19
+  hitCheckDelay: 0
   controller: {fileID: 6269350279262569289}
   jumpKey: 119
   speed: 3
