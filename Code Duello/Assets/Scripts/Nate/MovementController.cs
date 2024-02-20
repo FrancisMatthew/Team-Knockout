@@ -5,44 +5,18 @@ using UnityEngine;
 public class MovementController : MonoBehaviour
 {
 
-    Rigidbody m_Rigidbody;
-    public float m_Speed = 5f;
-
     [Space][Header("Attacks")][Space]
-    
-    [SerializeField] private int baseDamage;
-
-    PlayerHealthClass enemyPHC = null;
-
     Animator controllerAnim;
-
-    public Transform hitCastPoint;
-
-    public bool isEnemyInRange = false;
-    public float hitRange = 10f;
 
     public CombatClass playerCombatClass;
 
     public bool isBlocking;
     public bool isPunching;
-    public bool playerKnockedBack = false;
 
     [SerializeField] private AnimationClip punchClip;
     [SerializeField] private float punchClipTime;
+
     [SerializeField] private float hitCheckDelay;
-    [SerializeField] private float pushbackForce = 1f;
-
-    [Space]
-    [Header("DEBUG VARS")]
-    [Space]
-
-    
-
-    public bool disablePlayerInput;
-    public KeyCode lightAttackKey;
-    public KeyCode blockAttackKey;
-
-
 
     [Space][Header("CharacterController")][Space]
 
@@ -66,45 +40,22 @@ public class MovementController : MonoBehaviour
     void Start()
     {
         controllerAnim = gameObject.GetComponent<Animator>();
-        m_Rigidbody = GetComponent<Rigidbody>();
+
+        punchClipTime = punchClip.length;
     }
 
-    private void FixedUpdate()
-    {
-        RaycastHit hit;
-        if (Physics.Raycast(hitCastPoint.position, hitCastPoint.forward, out hit, hitRange))
-        {
-            if (!disablePlayerInput) 
-            {
-                isEnemyInRange = true;
-                if (enemyPHC == null)
-                {
-                    enemyPHC = hit.transform.gameObject.GetComponent<PlayerHealthClass>();
-                }
-                Debug.Log("Is Enemy In Range: " + isEnemyInRange + " - " + gameObject.name);
-            }
-        }
-        else
-        {
-            if (!disablePlayerInput)
-            {
-                isEnemyInRange = false;
-                enemyPHC = null;
-                Debug.Log("Is Enemy In Range: " + isEnemyInRange);
-            }
-        }
-    }
 
     void Update()
     {
-        if (Input.GetKeyDown(lightAttackKey) && !isPunching)
+
+        if (Input.GetButtonDown("Fire1") && !isPunching)
         {
             isPunching = true;
             Attack();
             Invoke("makePunchingFalse", punchClipTime);
-            Invoke("SendHitCheck", punchClipTime);
+            Invoke("SendHitCheck", hitCheckDelay);
         }
-        if (Input.GetKeyDown(blockAttackKey) && !isPunching)
+        if (Input.GetButton("Fire2") && !isPunching)
         {
             isBlocking = true;
             controllerAnim.SetBool("isBlocking", isBlocking);
@@ -115,7 +66,6 @@ public class MovementController : MonoBehaviour
             controllerAnim.SetBool("isBlocking", isBlocking);
         }
 
-        #region CC Move
 
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
@@ -123,55 +73,41 @@ public class MovementController : MonoBehaviour
         {
             Velocity.y = -2f;
         }
-        
 
         float x = Input.GetAxis("Horizontal");
-
         float z = 0;
 
-        move = transform.forward * x;
+        move = transform.forward * x ;
         move.z = z;
-        if (x < -0.3 && isGrounded && !isPunching)
+        if(x < -0.3 && isGrounded && !isPunching) 
         {
             WalkLeft();
         }
-        else if (x > 0.3 && isGrounded && !isPunching)
+        else if(x > 0.3 && isGrounded && !isPunching) 
         {
-            WalkRight();
+            WalkRight();    
         }
-        else if (x > -0.3 && x < 0.3 && isGrounded && !isPunching)
+        else if(x > -0.3 && x < 0.3 && isGrounded && !isPunching)
         {
             FightStance();
         }
 
         controller.Move(move * speed * Time.deltaTime);
-
+        
+        
 
         if (Input.GetKeyDown(jumpKey) && isGrounded)
         {
             Velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
 
-        #endregion
         Velocity.y += gravity * Time.deltaTime;
 
         controller.Move(Velocity * Time.deltaTime);
-    }
-    
-    public void ApplyKnockback() 
-    {
-        Debug.Log("Knockback - " + gameObject.name);
-        Velocity.y = Mathf.Sqrt(jumpHeight * -0.5f * gravity);
-        playerKnockedBack = true;
-        Velocity.x = Mathf.Sqrt(pushbackForce * -2f * gravity);
-        Invoke("ResetXVelocity", 0.3f);
-    }
 
-    private void ResetXVelocity() 
-    {
-        Velocity.x = 0;
-    }
 
+
+    }
 
     public void FightStance() 
     {
@@ -204,22 +140,7 @@ public class MovementController : MonoBehaviour
 
     public void SendHitCheck() 
     {
-        if(enemyPHC != null)
-        {
-            if (isGrounded) 
-            {
-                enemyPHC.TakeDamage(HitType.Chest, baseDamage);
-            }
-            else
-            {
-                enemyPHC.TakeDamage(HitType.Head, baseDamage);
-            }
-            
-        }
-        else 
-        {
-            return;
-        }
+        playerCombatClass.DamageHitCkeck();
     }
 
     public void SetBlocking()

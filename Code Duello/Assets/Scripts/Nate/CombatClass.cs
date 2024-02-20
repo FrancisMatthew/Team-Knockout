@@ -13,7 +13,7 @@ public class CombatClass : MonoBehaviour
     {
         if (attackLanded) 
         {
-            //hbc.TakeDamage(baseDamage);
+            hbc.TakeDamage(baseDamage);
             attackLanded = false;
             hbc = null;
         }

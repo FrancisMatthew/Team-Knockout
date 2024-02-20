@@ -2,59 +2,43 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-public enum HitType 
-{ 
-    Head,
-    Chest,
-    Legs
-}
-
 
 public class PlayerHealthClass : MonoBehaviour
 {
-    public MovementController playerMC;
-
     public float health = 25f;
-
     public Slider healthSlider;
+    public Image fillImage;
 
-    [SerializeField] private float damageMultiplyerChest = 1;
-    [SerializeField] private float damageMultiplyerHead = 1.5f;
-
-    private void Update()
+    private void Start()
     {
-        healthSlider.value = health;
+        // Set the initial value of the health slider
+        if (healthSlider != null)
+        {
+            healthSlider.minValue = 0f;
+            healthSlider.maxValue = health;
+            healthSlider.value = health;
+        }
     }
 
-    public void TakeDamage(HitType hitType, float damageIntake) 
+    private void OnCollisionEnter(Collision collision)
     {
-        if (playerMC.isBlocking)
+        if (collision.gameObject.CompareTag("DamageBox"))
         {
-            BockHit();
-            return;
-        }
+            // Decrease the player's health
+            health -= 10f;
 
-        if (hitType == HitType.Head) 
-        {
-            Debug.Log("HIT: " + hitType);
-            health -= damageIntake * damageMultiplyerHead;
-            Debug.Log(damageIntake * damageMultiplyerHead);
-            playerMC.ApplyKnockback();
+            // Update the health slider value
+            if (healthSlider != null)
+            {
+                healthSlider.value = health;
+            }
+
+            // Check if the player's health has reached zero
+            if (health <= 0f)
+            {
+                // Perform actions when player health is zero (e.g., game over)
+                Debug.Log("Player defeated!");
+            }
         }
-        if(hitType == HitType.Chest) 
-        {
-            
-            Debug.Log("HIT: " + hitType);
-            health -= damageIntake * damageMultiplyerChest;
-            Debug.Log(damageIntake * damageMultiplyerChest);
-            playerMC.ApplyKnockback();
-        }
-        
     }
-
-    public void BockHit() 
-    { 
-    
-    }
-
 }
