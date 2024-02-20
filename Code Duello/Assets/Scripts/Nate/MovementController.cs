@@ -1,15 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class MovementController : MonoBehaviour
 {
+    private PlayerControls playerControls;
+
+    public bool invertContorls = false;
 
     Rigidbody m_Rigidbody;
     public float m_Speed = 5f;
+    public Vector3 movement;
+    public float gravityFactor;
+
+    public static bool isGameActive = false;
 
     [Space][Header("Attacks")][Space]
-    
+
+    public bool arePlayersColliding = false;
+
     [SerializeField] private int baseDamage;
 
     PlayerHealthClass enemyPHC = null;
@@ -18,8 +28,11 @@ public class MovementController : MonoBehaviour
 
     public Transform hitCastPoint;
 
+    public float playerMoveX;
+
     public bool isEnemyInRange = false;
     public float hitRange = 10f;
+    public float overlapRange = 0.4f;
 
     public CombatClass playerCombatClass;
 
@@ -28,15 +41,13 @@ public class MovementController : MonoBehaviour
     public bool playerKnockedBack = false;
 
     [SerializeField] private AnimationClip punchClip;
+    [SerializeField] private AnimationClip walkFowardClip;
+    [SerializeField] private AnimationClip walkBackClip;
     [SerializeField] private float punchClipTime;
     [SerializeField] private float hitCheckDelay;
     [SerializeField] private float pushbackForce = 1f;
 
-    [Space]
-    [Header("DEBUG VARS")]
-    [Space]
-
-    
+    [Space][Header("DEBUG VARS")][Space]
 
     public bool disablePlayerInput;
     public KeyCode lightAttackKey;
@@ -52,7 +63,7 @@ public class MovementController : MonoBehaviour
 
     public float speed = 12f;
     public float gravity = -9.81f;
-    public float jumpHeight = 4.5f;
+    public float jumpHeight = 1.5f;
 
     [SerializeField] private Vector3 move;
 
@@ -65,113 +76,183 @@ public class MovementController : MonoBehaviour
 
     void Start()
     {
+        playerControls = new PlayerControls();
         controllerAnim = gameObject.GetComponent<Animator>();
         m_Rigidbody = GetComponent<Rigidbody>();
+        punchClipTime = punchClip.length;
+        if (invertContorls) 
+        { 
+            controllerAnim.SetFloat("walkLeftSpeed", -1);
+            controllerAnim.SetFloat("walkRightSpeed", -1);
+        }
     }
 
     private void FixedUpdate()
     {
-        RaycastHit hit;
-        if (Physics.Raycast(hitCastPoint.position, hitCastPoint.forward, out hit, hitRange))
+        if (!disablePlayerInput)
         {
-            if (!disablePlayerInput) 
+            RaycastHit overlap;
+            if (Physics.Raycast(hitCastPoint.position, hitCastPoint.forward, out overlap, overlapRange))
             {
-                isEnemyInRange = true;
-                if (enemyPHC == null)
+                if (overlap.transform.gameObject.tag == "Player")
                 {
-                    enemyPHC = hit.transform.gameObject.GetComponent<PlayerHealthClass>();
+                    arePlayersColliding = true;
                 }
-                Debug.Log("Is Enemy In Range: " + isEnemyInRange + " - " + gameObject.name);
+            }
+            else
+            {
+                arePlayersColliding = false;
+
             }
         }
-        else
+
+        if (!disablePlayerInput) 
         {
-            if (!disablePlayerInput)
+            RaycastHit hit;
+            if (Physics.Raycast(hitCastPoint.position, hitCastPoint.forward, out hit, hitRange))
+            {
+                if (hit.transform.gameObject.tag == "Player")
+                {
+                    isEnemyInRange = true;
+                    if (enemyPHC == null)
+                    {
+                        enemyPHC = hit.transform.gameObject.GetComponent<PlayerHealthClass>();
+                    }
+                    Debug.Log("Is Enemy In Range: " + isEnemyInRange + " - " + gameObject.name);
+                }
+            }
+            else
             {
                 isEnemyInRange = false;
                 enemyPHC = null;
                 Debug.Log("Is Enemy In Range: " + isEnemyInRange);
             }
-        }
+        } 
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(lightAttackKey) && !isPunching)
+        if (isGameActive)
+        {
+            if (Input.GetKeyDown(blockAttackKey) && !isPunching)
+            {
+                isBlocking = true;
+                controllerAnim.SetBool("isBlocking", isBlocking);
+            }
+            if (Input.GetButtonUp("Fire2") && !isPunching)
+            {
+                isBlocking = false;
+                controllerAnim.SetBool("isBlocking", isBlocking);
+            }
+
+            isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+
+            if (isGrounded && Velocity.y < 0)
+            {
+                Velocity.y = -2f;
+            }
+
+            move = transform.forward * playerMoveX;
+
+
+            if (playerMoveX < -0.3 && isGrounded && !isPunching)
+            {
+                WalkLeft();
+            }
+            else if (playerMoveX > 0.3 && isGrounded && !isPunching)
+            {
+                WalkRight();
+            }
+            else if (playerMoveX > -0.3 && playerMoveX < 0.3 && isGrounded && !isPunching)
+            {
+                FightStance();
+            }
+
+            if (invertContorls)
+            {
+                if (!arePlayersColliding)
+                {
+                    controller.Move(-move * speed * Time.deltaTime);
+                }
+                else if (arePlayersColliding && playerMoveX > 0)
+                {
+                    controller.Move(-move * speed * Time.deltaTime);
+                }
+            }
+            else
+            {
+                if (!arePlayersColliding)
+                {
+                    controller.Move(move * speed * Time.deltaTime);
+                }
+                else if (arePlayersColliding && playerMoveX < 0)
+                {
+                    controller.Move(move * speed * Time.deltaTime);
+                }
+            }
+        }
+        
+        Velocity.y += gravity * Time.deltaTime;
+        controller.Move(Velocity * Time.deltaTime);
+    }
+    
+    private void OnJump()
+    {
+        Debug.Log("Jump");
+        if (isGrounded)
+        {
+            Velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        }
+    }
+    private void OnMove(InputValue inputValue)
+    {
+        Vector2 inputValVec = inputValue.Get<Vector2>();
+        playerMoveX = inputValVec.x;
+    }
+
+    private void OnLightAttack() 
+    {
+        Debug.Log("LightAttackCont");
+        if (!isPunching)
         {
             isPunching = true;
             Attack();
             Invoke("makePunchingFalse", punchClipTime);
-            Invoke("SendHitCheck", punchClipTime);
+            Invoke("SendHitCheck", hitCheckDelay);
         }
-        if (Input.GetKeyDown(blockAttackKey) && !isPunching)
-        {
-            isBlocking = true;
-            controllerAnim.SetBool("isBlocking", isBlocking);
-        }
-        if (Input.GetButtonUp("Fire2") && !isPunching)
-        {
-            isBlocking = false;
-            controllerAnim.SetBool("isBlocking", isBlocking);
-        }
-
-        #region CC Move
-
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-
-        if (isGrounded && Velocity.y < 0)
-        {
-            Velocity.y = -2f;
-        }
-        
-
-        float x = Input.GetAxis("Horizontal");
-
-        float z = 0;
-
-        move = transform.forward * x;
-        move.z = z;
-        if (x < -0.3 && isGrounded && !isPunching)
-        {
-            WalkLeft();
-        }
-        else if (x > 0.3 && isGrounded && !isPunching)
-        {
-            WalkRight();
-        }
-        else if (x > -0.3 && x < 0.3 && isGrounded && !isPunching)
-        {
-            FightStance();
-        }
-
-        controller.Move(move * speed * Time.deltaTime);
-
-
-        if (Input.GetKeyDown(jumpKey) && isGrounded)
-        {
-            Velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-        }
-
-        #endregion
-        Velocity.y += gravity * Time.deltaTime;
-
-        controller.Move(Velocity * Time.deltaTime);
     }
-    
+
     public void ApplyKnockback() 
     {
-        Debug.Log("Knockback - " + gameObject.name);
-        Velocity.y = Mathf.Sqrt(jumpHeight * -0.5f * gravity);
-        playerKnockedBack = true;
-        Velocity.x = Mathf.Sqrt(pushbackForce * -2f * gravity);
-        Invoke("ResetXVelocity", 0.3f);
+        if (invertContorls) 
+        {
+            Debug.Log("Knockback - " + gameObject.name);
+            Velocity.y = Mathf.Sqrt(jumpHeight * -0.5f * gravity);
+            playerKnockedBack = true;
+            Velocity.x = Mathf.Sqrt(pushbackForce * -2f * gravity);
+            Invoke("ResetXVelocity", 0.3f);
+        }
+        else 
+        {
+            Debug.Log("Knockback - " + gameObject.name);
+            Velocity.y = Mathf.Sqrt(jumpHeight * -0.5f * gravity);
+            playerKnockedBack = true;
+            Velocity.x = -Mathf.Sqrt(pushbackForce * -2f * gravity);
+            Invoke("ResetXVelocity", 0.3f);
+        }
+        
     }
 
     private void ResetXVelocity() 
     {
         Velocity.x = 0;
+        playerKnockedBack = false;
     }
 
+    public void DamageAnim() 
+    {
+        controllerAnim.SetTrigger("TakeDamage");
+    }
 
     public void FightStance() 
     {
@@ -214,7 +295,6 @@ public class MovementController : MonoBehaviour
             {
                 enemyPHC.TakeDamage(HitType.Head, baseDamage);
             }
-            
         }
         else 
         {
@@ -233,6 +313,11 @@ public class MovementController : MonoBehaviour
             isBlocking = true;
         }
         controllerAnim.SetBool("isBlocking", isBlocking);
+    }
+    public void KillPlayer() 
+    {
+        isGameActive = false;
+        controllerAnim.SetBool("isDead", true);
     }
 
 }

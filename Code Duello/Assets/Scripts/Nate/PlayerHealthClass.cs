@@ -24,6 +24,10 @@ public class PlayerHealthClass : MonoBehaviour
     private void Update()
     {
         healthSlider.value = health;
+        if(health <= 0) 
+        {
+            playerMC.KillPlayer();
+        }
     }
 
     public void TakeDamage(HitType hitType, float damageIntake) 
@@ -34,8 +38,9 @@ public class PlayerHealthClass : MonoBehaviour
             return;
         }
 
-        if (hitType == HitType.Head) 
+        if (hitType == HitType.Head)
         {
+            playerMC.DamageAnim();
             Debug.Log("HIT: " + hitType);
             health -= damageIntake * damageMultiplyerHead;
             Debug.Log(damageIntake * damageMultiplyerHead);
@@ -43,7 +48,7 @@ public class PlayerHealthClass : MonoBehaviour
         }
         if(hitType == HitType.Chest) 
         {
-            
+            playerMC.DamageAnim();
             Debug.Log("HIT: " + hitType);
             health -= damageIntake * damageMultiplyerChest;
             Debug.Log(damageIntake * damageMultiplyerChest);
