@@ -2835,9 +2835,21 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 5e8576f2-a076-4838-bca0-4082219c95a8
     m_ActionName: Gameplay/Jump[/DualShock4GamepadHID/buttonSouth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a3b259a2-13da-43ef-814e-641df289d6b7
+    m_ActionName: Gameplay/LightAttack[/DualShock4GamepadHID/buttonWest,/XInputControllerWindows/buttonWest,/DualShock4GamepadHID1/buttonWest]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e2276908-921c-449e-8721-559323594d65
+    m_ActionName: Gameplay/Move[/DualShock4GamepadHID/leftStick,/XInputControllerWindows/leftStick,/DualShock4GamepadHID1/leftStick]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 637b9a31-ce42-41be-b8e3-233734721797
+    m_ActionName: Spawning/Spawn[/DualShock4GamepadHID/buttonSouth,/XInputControllerWindows/buttonSouth,/DualShock4GamepadHID1/buttonSouth]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: Gameplay
+  m_DefaultActionMap: 2a762b65-244e-4877-b6a9-876a9549c6c8
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!143 &6269350279262569289

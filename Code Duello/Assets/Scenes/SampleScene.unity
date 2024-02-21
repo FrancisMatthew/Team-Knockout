@@ -351,7 +351,7 @@ MonoBehaviour:
   m_NotificationBehavior: 0
   m_MaxPlayerCount: 2
   m_AllowJoining: 1
-  m_JoinBehavior: 0
+  m_JoinBehavior: 1
   m_PlayerJoinedEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -367,7 +367,15 @@ MonoBehaviour:
       m_Id: 2e492adf-7f83-45f9-9928-9a12590711c3
       m_Processors: 
       m_Interactions: 
-      m_SingletonActionBindings: []
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: 4a20a475-e476-455a-81fe-4e4cd2ff18e4
+        m_Path: <Gamepad>/dpad/down
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Join
+        m_Flags: 0
       m_Flags: 0
     m_Reference: {fileID: 0}
   m_PlayerPrefab: {fileID: 7911298940396307012, guid: 2df01aad4de963647ae654899ed0c788, type: 3}

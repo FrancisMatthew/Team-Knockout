@@ -20,6 +20,7 @@ public class PlayerHealthClass : MonoBehaviour
 
     [SerializeField] private float damageMultiplyerChest = 1;
     [SerializeField] private float damageMultiplyerHead = 1.5f;
+    [SerializeField] private float blockMultiplyer = 0.2f;
 
     private void Update()
     {
@@ -34,7 +35,7 @@ public class PlayerHealthClass : MonoBehaviour
     {
         if (playerMC.isBlocking)
         {
-            BockHit();
+            BlockHit(damageIntake);
             return;
         }
 
@@ -57,9 +58,10 @@ public class PlayerHealthClass : MonoBehaviour
         
     }
 
-    public void BockHit() 
-    { 
-    
+    public void BlockHit(float damageIntake) 
+    {
+        health -= damageIntake * blockMultiplyer;
+        Debug.Log(damageIntake * blockMultiplyer);
     }
 
 }

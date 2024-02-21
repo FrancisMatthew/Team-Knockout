@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -134,16 +135,7 @@ public class MovementController : MonoBehaviour
     {
         if (isGameActive)
         {
-            if (Input.GetKeyDown(blockAttackKey) && !isPunching)
-            {
-                isBlocking = true;
-                controllerAnim.SetBool("isBlocking", isBlocking);
-            }
-            if (Input.GetButtonUp("Fire2") && !isPunching)
-            {
-                isBlocking = false;
-                controllerAnim.SetBool("isBlocking", isBlocking);
-            }
+            
 
             isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
@@ -220,6 +212,22 @@ public class MovementController : MonoBehaviour
             Invoke("makePunchingFalse", punchClipTime);
             Invoke("SendHitCheck", hitCheckDelay);
         }
+    }
+
+    private void OnBlock(InputValue inputValue) 
+    {
+        if (inputValue.Get<float>() > 0) 
+        {
+            isBlocking = true;
+            controllerAnim.SetBool("isBlocking", isBlocking);
+        }
+
+        else 
+        {
+            isBlocking = false;
+            controllerAnim.SetBool("isBlocking", isBlocking);
+        }
+
     }
 
     public void ApplyKnockback() 
