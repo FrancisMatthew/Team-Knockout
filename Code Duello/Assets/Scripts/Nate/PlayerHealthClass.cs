@@ -12,12 +12,17 @@ public enum HitType
 
 public class PlayerHealthClass : MonoBehaviour
 {
+
+    [Header("PlayerMC Refs")] [SerializeReference] [Space]
+
     public MovementController playerMC;
 
-    public float health = 25f;
+    [Header("Health")][SerializeReference][Space]
 
+    public float health = 25f;
     public Slider healthSlider;
 
+    [Header("Damage Multiplyers")] [SerializeReference] [Space]
     [SerializeField] private float damageMultiplyerChest = 1;
     [SerializeField] private float damageMultiplyerHead = 1.5f;
     [SerializeField] private float blockMultiplyer = 0.2f;
@@ -55,7 +60,6 @@ public class PlayerHealthClass : MonoBehaviour
             Debug.Log(damageIntake * damageMultiplyerChest);
             playerMC.ApplyKnockback();
         }
-        
     }
 
     public void BlockHit(float damageIntake) 

@@ -6,41 +6,28 @@ using UnityEngine.InputSystem;
 
 public class MovementController : MonoBehaviour
 {
-    private PlayerControls playerControls;
+    [Header("Gamepad/GPControls")] [SerializeReference] [Space]
 
+    [SerializeField] private Gamepad playerGP;
+    public int playerVal;
     public bool invertContorls = false;
-
-    Rigidbody m_Rigidbody;
-    public float m_Speed = 5f;
-    public Vector3 movement;
-    public float gravityFactor;
-
     public static bool isGameActive = false;
+    private Coroutine stopRumbleAfterTimeCoroutine;
 
-    [Space][Header("Attacks")][Space]
-
-    public bool arePlayersColliding = false;
-
-    [SerializeField] private int baseDamage;
-
-    PlayerHealthClass enemyPHC = null;
-
-    Animator controllerAnim;
-
-    public Transform hitCastPoint;
-
-    public float playerMoveX;
-
-    public bool isEnemyInRange = false;
-    public float hitRange = 10f;
-    public float overlapRange = 0.4f;
-
-    public CombatClass playerCombatClass;
+    [Header("Attacks/Animations")][Space]
 
     public bool isBlocking;
-    public bool isPunching;
-    public bool playerKnockedBack = false;
-
+    public bool arePlayersColliding = false;
+    [SerializeField] private int baseDamage;
+    [SerializeField] private PlayerHealthClass enemyPHC = null;
+    [SerializeField] private Animator controllerAnim;
+    [SerializeField] private Transform hitCastPoint;
+    [SerializeField] private float playerMoveX;
+    [SerializeField] private bool isEnemyInRange = false;
+    [SerializeField] private float hitRange = 10f;
+    [SerializeField] private float overlapRange = 0.4f;
+    [SerializeField] private bool isPunching;
+    [SerializeField] private bool playerKnockedBack = false;
     [SerializeField] private AnimationClip punchClip;
     [SerializeField] private AnimationClip walkFowardClip;
     [SerializeField] private AnimationClip walkBackClip;
@@ -48,38 +35,39 @@ public class MovementController : MonoBehaviour
     [SerializeField] private float hitCheckDelay;
     [SerializeField] private float pushbackForce = 1f;
 
-    [Space][Header("DEBUG VARS")][Space]
+    [Header("Audio")][Space]
 
-    public bool disablePlayerInput;
-    public KeyCode lightAttackKey;
-    public KeyCode blockAttackKey;
+    [SerializeField] private AudioSource speaker;
+    [SerializeField] private AudioClip attackSound;
+    [SerializeField] private float attackVolume;
+    [SerializeField] private AudioClip takeDamageSound;
+    [SerializeField] private float takeDamageVolume;
+    private Coroutine playSoundAfterTimeCoroutine;
 
+    [Header("CharacterController")][Space]
 
-
-    [Space][Header("CharacterController")][Space]
-
-    public CharacterController controller;
-
-    public KeyCode jumpKey;
-
-    public float speed = 12f;
-    public float gravity = -9.81f;
-    public float jumpHeight = 1.5f;
-
+    [SerializeField] private CharacterController controller;
+    [SerializeField] private float speed = 12f;
+    [SerializeField] private float gravity = -9.81f;
+    [SerializeField] private float jumpHeight = 1.5f;
     [SerializeField] private Vector3 move;
+    [SerializeField] private Vector3 Velocity;
+    [SerializeField] private bool isGrounded;
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private float groundDistance = 0.4f;
+    [SerializeField] private LayerMask groundMask;
 
-    Vector3 Velocity;
-    public bool isGrounded;
+    [Header("Debug Vars")][Space]
 
-    public Transform groundCheck;
-    public float groundDistance = 0.4f;
-    public LayerMask groundMask;
+    [SerializeField] private bool disablePlayerInput_Debug = false;
 
     void Start()
     {
-        playerControls = new PlayerControls();
+        speaker = gameObject.GetComponent<AudioSource>();
+        playerGP = Gamepad.all[playerVal];
         controllerAnim = gameObject.GetComponent<Animator>();
-        m_Rigidbody = GetComponent<Rigidbody>();
+        controllerAnim.SetBool("isGameActive", true);
+        
         punchClipTime = punchClip.length;
         if (invertContorls) 
         { 
@@ -90,7 +78,7 @@ public class MovementController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!disablePlayerInput)
+        if (!disablePlayerInput_Debug)
         {
             RaycastHit overlap;
             if (Physics.Raycast(hitCastPoint.position, hitCastPoint.forward, out overlap, overlapRange))
@@ -103,11 +91,10 @@ public class MovementController : MonoBehaviour
             else
             {
                 arePlayersColliding = false;
-
             }
         }
 
-        if (!disablePlayerInput) 
+        if (!disablePlayerInput_Debug) 
         {
             RaycastHit hit;
             if (Physics.Raycast(hitCastPoint.position, hitCastPoint.forward, out hit, hitRange))
@@ -119,14 +106,12 @@ public class MovementController : MonoBehaviour
                     {
                         enemyPHC = hit.transform.gameObject.GetComponent<PlayerHealthClass>();
                     }
-                    Debug.Log("Is Enemy In Range: " + isEnemyInRange + " - " + gameObject.name);
                 }
             }
             else
             {
                 isEnemyInRange = false;
                 enemyPHC = null;
-                Debug.Log("Is Enemy In Range: " + isEnemyInRange);
             }
         } 
     }
@@ -135,8 +120,6 @@ public class MovementController : MonoBehaviour
     {
         if (isGameActive)
         {
-            
-
             isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
             if (isGrounded && Velocity.y < 0)
@@ -183,15 +166,22 @@ public class MovementController : MonoBehaviour
                 }
             }
         }
-        
+        else 
+        {
+            if (controllerAnim.GetBool("isGameActive") == true) 
+            {
+                controllerAnim.SetBool("isGameActive", false);
+                FightStance();
+            }
+            
+        }
         Velocity.y += gravity * Time.deltaTime;
         controller.Move(Velocity * Time.deltaTime);
     }
     
     private void OnJump()
     {
-        Debug.Log("Jump");
-        if (isGrounded)
+        if (isGrounded && isGameActive)
         {
             Velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
@@ -204,11 +194,11 @@ public class MovementController : MonoBehaviour
 
     private void OnLightAttack() 
     {
-        Debug.Log("LightAttackCont");
-        if (!isPunching)
+        if (!isPunching && isGameActive)
         {
             isPunching = true;
             Attack();
+            playSoundAfterTimeCoroutine = StartCoroutine(PlaySound(hitCheckDelay, attackVolume, attackSound));
             Invoke("makePunchingFalse", punchClipTime);
             Invoke("SendHitCheck", hitCheckDelay);
         }
@@ -216,7 +206,7 @@ public class MovementController : MonoBehaviour
 
     private void OnBlock(InputValue inputValue) 
     {
-        if (inputValue.Get<float>() > 0) 
+        if (inputValue.Get<float>() > 0 && isGameActive) 
         {
             isBlocking = true;
             controllerAnim.SetBool("isBlocking", isBlocking);
@@ -234,7 +224,6 @@ public class MovementController : MonoBehaviour
     {
         if (invertContorls) 
         {
-            Debug.Log("Knockback - " + gameObject.name);
             Velocity.y = Mathf.Sqrt(jumpHeight * -0.5f * gravity);
             playerKnockedBack = true;
             Velocity.x = Mathf.Sqrt(pushbackForce * -2f * gravity);
@@ -242,13 +231,11 @@ public class MovementController : MonoBehaviour
         }
         else 
         {
-            Debug.Log("Knockback - " + gameObject.name);
             Velocity.y = Mathf.Sqrt(jumpHeight * -0.5f * gravity);
             playerKnockedBack = true;
             Velocity.x = -Mathf.Sqrt(pushbackForce * -2f * gravity);
             Invoke("ResetXVelocity", 0.3f);
         }
-        
     }
 
     private void ResetXVelocity() 
@@ -260,12 +247,13 @@ public class MovementController : MonoBehaviour
     public void DamageAnim() 
     {
         controllerAnim.SetTrigger("TakeDamage");
+        playSoundAfterTimeCoroutine = StartCoroutine(PlaySound(0, takeDamageVolume, takeDamageSound));
+        RumblePulse(0.7f, 0.7f, 0.3f);
     }
 
     public void FightStance() 
     {
         controllerAnim.SetBool("isWalkingRight", false);
-
         controllerAnim.SetBool("isWalkingLeft", false);
     }
     public void WalkLeft()
@@ -322,10 +310,41 @@ public class MovementController : MonoBehaviour
         }
         controllerAnim.SetBool("isBlocking", isBlocking);
     }
+
+
     public void KillPlayer() 
     {
         isGameActive = false;
         controllerAnim.SetBool("isDead", true);
     }
 
+    private void RumblePulse(float lowFrequency, float highFrequency, float duration) 
+    {
+        playerGP.SetMotorSpeeds(lowFrequency, highFrequency);
+        stopRumbleAfterTimeCoroutine = StartCoroutine(StopRumble(0.3f));
+    }
+
+    private IEnumerator StopRumble(float duration) 
+    {
+        float elapsedTime = 0f;
+        while(elapsedTime < duration) 
+        {
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        playerGP.SetMotorSpeeds(0f, 0f);
+    }
+
+    private IEnumerator PlaySound(float delay, float volume,AudioClip clip)
+    {
+        float elapsedTime = 0f;
+        while (elapsedTime < delay)
+        {
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        speaker.clip = clip;
+        speaker.volume = volume;
+        speaker.Play();
+    }
 }

@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6385574865889580868}
   - component: {fileID: 1020205807099501530}
-  - component: {fileID: 1276392711841707501}
   m_Layer: 0
   m_Name: BladeCollider -- CC
   m_TagString: DamagePoint
@@ -56,21 +55,6 @@ CapsuleCollider:
   m_Height: 0.5889851
   m_Direction: 2
   m_Center: {x: 0.13999255, y: -0.039996147, z: 0.5138353}
---- !u!114 &1276392711841707501
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 127781025548563991}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fccccf828de99d741a3f012659e4763c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  baseDamage: 10
-  attackLanded: 0
-  hbc: {fileID: 0}
 --- !u!1 &206898555706339690
 GameObject:
   m_ObjectHideFlags: 0
@@ -523,7 +507,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3226660260796387851}
   - component: {fileID: 1305801147675753137}
-  - component: {fileID: 7684117897380512774}
   m_Layer: 0
   m_Name: Paladin_J_Nordstrom
   m_TagString: DamagePoint
@@ -668,29 +651,6 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.79662716, y: 0.45543876, z: 0.2404747}
     m_Extent: {x: 0.15018606, y: 0.04597959, z: 0.507103}
   m_DirtyAABB: 0
---- !u!136 &7684117897380512774
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1363433235657182829}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.04762377
-  m_Height: 1.0067046
-  m_Direction: 1
-  m_Center: {x: 0.24946536, y: 1.4074749, z: 0.1581381}
 --- !u!1 &1458405036074733120
 GameObject:
   m_ObjectHideFlags: 0
@@ -2744,6 +2704,7 @@ GameObject:
   - component: {fileID: 8039632567824340715}
   - component: {fileID: 8797729248193035768}
   - component: {fileID: 2221757420552040035}
+  - component: {fileID: -2961761213888379690}
   m_Layer: 0
   m_Name: Steven - paladin
   m_TagString: Player
@@ -2761,7 +2722,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: -0.04, y: 1.55, z: 0.81}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.8662, y: 1.8662, z: 1.8662}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7165751872621718615}
@@ -2847,9 +2808,13 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 637b9a31-ce42-41be-b8e3-233734721797
     m_ActionName: Spawning/Spawn[/DualShock4GamepadHID/buttonSouth,/XInputControllerWindows/buttonSouth,/DualShock4GamepadHID1/buttonSouth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0e9267f7-7e17-4be7-94e3-8c2ab8d31231
+    m_ActionName: Gameplay/Block[/DualShock4GamepadHID/leftTrigger,/XInputControllerWindows/leftTrigger]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: 2a762b65-244e-4877-b6a9-876a9549c6c8
+  m_DefaultActionMap: Gameplay
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!143 &6269350279262569289
@@ -2890,19 +2855,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3445245d8bfa2e24897abae0d34bb85e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerGP:
+    rid: -2
+  playerVal: 0
   invertContorls: 0
-  m_Speed: 150
-  movement: {x: 0, y: 0, z: 0}
-  gravityFactor: 180
+  isBlocking: 0
   arePlayersColliding: 0
   baseDamage: 10
+  enemyPHC: {fileID: 0}
+  controllerAnim: {fileID: 0}
   hitCastPoint: {fileID: 4622459828056853711}
   playerMoveX: 0
   isEnemyInRange: 0
-  hitRange: 1.2
+  hitRange: 1.4
   overlapRange: 0.4
-  playerCombatClass: {fileID: 1276392711841707501}
-  isBlocking: 0
   isPunching: 0
   playerKnockedBack: 0
   punchClip: {fileID: 7400000, guid: 34d15b4ddd774044ba28605eae00a0ca, type: 2}
@@ -2911,21 +2877,29 @@ MonoBehaviour:
   punchClipTime: 0.6
   hitCheckDelay: 0.6
   pushbackForce: 0.4
-  disablePlayerInput: 0
-  lightAttackKey: 323
-  blockAttackKey: 324
+  speaker: {fileID: 0}
+  attackSound: {fileID: 8300000, guid: 508f67a2f303b4c468d3d0a823dc11a5, type: 3}
+  attackVolume: 1
+  takeDamageSound: {fileID: 8300000, guid: acd32ab753160134f89b901bb1de8cf5, type: 3}
+  takeDamageVolume: 0.05
   controller: {fileID: 6269350279262569289}
-  jumpKey: 119
-  speed: 2
+  speed: 5
   gravity: -18
   jumpHeight: 1.5
   move: {x: 0, y: 0, z: 0}
+  Velocity: {x: 0, y: 0, z: 0}
   isGrounded: 0
   groundCheck: {fileID: 6780272525957603297}
   groundDistance: 0.4
   groundMask:
     serializedVersion: 2
     m_Bits: 64
+  disablePlayerInput_Debug: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!114 &8797729248193035768
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2943,6 +2917,7 @@ MonoBehaviour:
   healthSlider: {fileID: 0}
   damageMultiplyerChest: 1
   damageMultiplyerHead: 1.5
+  blockMultiplyer: 0.2
 --- !u!136 &2221757420552040035
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2966,6 +2941,102 @@ CapsuleCollider:
   m_Height: 2.0244784
   m_Direction: 1
   m_Center: {x: 0, y: 0.9542453, z: 0}
+--- !u!82 &-2961761213888379690
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7911298940396307012}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &7977121500811455020
 GameObject:
   m_ObjectHideFlags: 0

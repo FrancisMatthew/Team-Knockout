@@ -9,9 +9,6 @@ public class HitBoxClass : MonoBehaviour
 
     [SerializeField] private float damageMultiplyer;
 
-
-
-
     public void TakeDamage(int damageIntake)
     {
         playerPHC.health = damageIntake * damageMultiplyer;
