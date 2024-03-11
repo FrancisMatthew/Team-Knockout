@@ -90,28 +90,48 @@
             ]
         },
         {
-            "name": "Spawning",
+            "name": "Testing",
             "id": "1495aeae-fee3-4897-812b-6f9311c903bd",
             "actions": [
                 {
                     "name": "Spawn",
-                    "type": "Value",
+                    "type": "Button",
                     "id": "637b9a31-ce42-41be-b8e3-233734721797",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "ChangeScene",
+                    "type": "Button",
+                    "id": "af47358f-5178-47e2-b91e-a46380bc6048",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
                 {
                     "name": "",
                     "id": "ac6b1a4b-e23b-4ed3-9fa3-fe71f698142c",
-                    "path": "<Gamepad>/buttonSouth",
+                    "path": "<Gamepad>/dpad/down",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Spawn",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6f738315-dcec-43d1-85bd-1cac0d5b3a45",
+                    "path": "<Gamepad>/dpad/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeScene",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

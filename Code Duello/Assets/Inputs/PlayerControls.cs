@@ -112,28 +112,48 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             ]
         },
         {
-            ""name"": ""Spawning"",
+            ""name"": ""Testing"",
             ""id"": ""1495aeae-fee3-4897-812b-6f9311c903bd"",
             ""actions"": [
                 {
                     ""name"": ""Spawn"",
-                    ""type"": ""Value"",
+                    ""type"": ""Button"",
                     ""id"": ""637b9a31-ce42-41be-b8e3-233734721797"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ChangeScene"",
+                    ""type"": ""Button"",
+                    ""id"": ""af47358f-5178-47e2-b91e-a46380bc6048"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
                 {
                     ""name"": """",
                     ""id"": ""ac6b1a4b-e23b-4ed3-9fa3-fe71f698142c"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""path"": ""<Gamepad>/dpad/down"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Spawn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6f738315-dcec-43d1-85bd-1cac0d5b3a45"",
+                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeScene"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -148,9 +168,10 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Gameplay_LightAttack = m_Gameplay.FindAction("LightAttack", throwIfNotFound: true);
         m_Gameplay_Move = m_Gameplay.FindAction("Move", throwIfNotFound: true);
         m_Gameplay_Block = m_Gameplay.FindAction("Block", throwIfNotFound: true);
-        // Spawning
-        m_Spawning = asset.FindActionMap("Spawning", throwIfNotFound: true);
-        m_Spawning_Spawn = m_Spawning.FindAction("Spawn", throwIfNotFound: true);
+        // Testing
+        m_Testing = asset.FindActionMap("Testing", throwIfNotFound: true);
+        m_Testing_Spawn = m_Testing.FindAction("Spawn", throwIfNotFound: true);
+        m_Testing_ChangeScene = m_Testing.FindAction("ChangeScene", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -279,51 +300,59 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     }
     public GameplayActions @Gameplay => new GameplayActions(this);
 
-    // Spawning
-    private readonly InputActionMap m_Spawning;
-    private List<ISpawningActions> m_SpawningActionsCallbackInterfaces = new List<ISpawningActions>();
-    private readonly InputAction m_Spawning_Spawn;
-    public struct SpawningActions
+    // Testing
+    private readonly InputActionMap m_Testing;
+    private List<ITestingActions> m_TestingActionsCallbackInterfaces = new List<ITestingActions>();
+    private readonly InputAction m_Testing_Spawn;
+    private readonly InputAction m_Testing_ChangeScene;
+    public struct TestingActions
     {
         private @PlayerControls m_Wrapper;
-        public SpawningActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Spawn => m_Wrapper.m_Spawning_Spawn;
-        public InputActionMap Get() { return m_Wrapper.m_Spawning; }
+        public TestingActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Spawn => m_Wrapper.m_Testing_Spawn;
+        public InputAction @ChangeScene => m_Wrapper.m_Testing_ChangeScene;
+        public InputActionMap Get() { return m_Wrapper.m_Testing; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(SpawningActions set) { return set.Get(); }
-        public void AddCallbacks(ISpawningActions instance)
+        public static implicit operator InputActionMap(TestingActions set) { return set.Get(); }
+        public void AddCallbacks(ITestingActions instance)
         {
-            if (instance == null || m_Wrapper.m_SpawningActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_SpawningActionsCallbackInterfaces.Add(instance);
+            if (instance == null || m_Wrapper.m_TestingActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_TestingActionsCallbackInterfaces.Add(instance);
             @Spawn.started += instance.OnSpawn;
             @Spawn.performed += instance.OnSpawn;
             @Spawn.canceled += instance.OnSpawn;
+            @ChangeScene.started += instance.OnChangeScene;
+            @ChangeScene.performed += instance.OnChangeScene;
+            @ChangeScene.canceled += instance.OnChangeScene;
         }
 
-        private void UnregisterCallbacks(ISpawningActions instance)
+        private void UnregisterCallbacks(ITestingActions instance)
         {
             @Spawn.started -= instance.OnSpawn;
             @Spawn.performed -= instance.OnSpawn;
             @Spawn.canceled -= instance.OnSpawn;
+            @ChangeScene.started -= instance.OnChangeScene;
+            @ChangeScene.performed -= instance.OnChangeScene;
+            @ChangeScene.canceled -= instance.OnChangeScene;
         }
 
-        public void RemoveCallbacks(ISpawningActions instance)
+        public void RemoveCallbacks(ITestingActions instance)
         {
-            if (m_Wrapper.m_SpawningActionsCallbackInterfaces.Remove(instance))
+            if (m_Wrapper.m_TestingActionsCallbackInterfaces.Remove(instance))
                 UnregisterCallbacks(instance);
         }
 
-        public void SetCallbacks(ISpawningActions instance)
+        public void SetCallbacks(ITestingActions instance)
         {
-            foreach (var item in m_Wrapper.m_SpawningActionsCallbackInterfaces)
+            foreach (var item in m_Wrapper.m_TestingActionsCallbackInterfaces)
                 UnregisterCallbacks(item);
-            m_Wrapper.m_SpawningActionsCallbackInterfaces.Clear();
+            m_Wrapper.m_TestingActionsCallbackInterfaces.Clear();
             AddCallbacks(instance);
         }
     }
-    public SpawningActions @Spawning => new SpawningActions(this);
+    public TestingActions @Testing => new TestingActions(this);
     public interface IGameplayActions
     {
         void OnJump(InputAction.CallbackContext context);
@@ -331,8 +360,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnBlock(InputAction.CallbackContext context);
     }
-    public interface ISpawningActions
+    public interface ITestingActions
     {
         void OnSpawn(InputAction.CallbackContext context);
+        void OnChangeScene(InputAction.CallbackContext context);
     }
 }
