@@ -2741,11 +2741,11 @@ GameObject:
   - component: {fileID: 3139424917475975232}
   - component: {fileID: 2288289591773096019}
   - component: {fileID: 6269350279262569289}
-  - component: {fileID: 8039632567824340715}
+  - component: {fileID: 8029007457617778479}
   - component: {fileID: 8797729248193035768}
   - component: {fileID: 2221757420552040035}
   m_Layer: 0
-  m_Name: Steven - paladin
+  m_Name: Ethan's Paladin
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2783,7 +2783,7 @@ Animator:
   m_GameObject: {fileID: 7911298940396307012}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 92e3676fdb39d9d4a8c769738bcfe3dc, type: 2}
+  m_Controller: {fileID: 9100000, guid: 1999da4bda2891746b2cc64665e423b0, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -2821,7 +2821,7 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8039632567824340715}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MovementController, Assembly-CSharp
         m_MethodName: OnJump
         m_Mode: 0
@@ -2878,7 +2878,7 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.97, z: 0}
---- !u!114 &8039632567824340715
+--- !u!114 &8029007457617778479
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2887,7 +2887,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7911298940396307012}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3445245d8bfa2e24897abae0d34bb85e, type: 3}
+  m_Script: {fileID: 11500000, guid: c79fd8bf9d24b1c40b50374ea362ec75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   invertContorls: 0
@@ -2905,17 +2905,17 @@ MonoBehaviour:
   isBlocking: 0
   isPunching: 0
   playerKnockedBack: 0
-  punchClip: {fileID: 7400000, guid: 34d15b4ddd774044ba28605eae00a0ca, type: 2}
-  walkFowardClip: {fileID: 7400000, guid: 986a6c10055ddc340ab54afac49f42b5, type: 2}
-  walkBackClip: {fileID: 7400000, guid: 8bcb6b5e5d8c1614f8dde5ee62c83a57, type: 2}
+  punchClip: {fileID: 0}
+  walkFowardClip: {fileID: 7400000, guid: af5dc4549f0d5e849b5c11c06b0b58d6, type: 2}
+  walkBackClip: {fileID: 7400000, guid: 2d734faafa1d828458effdea01f052e5, type: 2}
   punchClipTime: 0.6
   hitCheckDelay: 0.6
   pushbackForce: 0.4
   disablePlayerInput: 0
-  lightAttackKey: 323
-  blockAttackKey: 324
+  lightAttackKey: 0
+  blockAttackKey: 0
   controller: {fileID: 6269350279262569289}
-  jumpKey: 119
+  jumpKey: 0
   speed: 2
   gravity: -18
   jumpHeight: 1.5
@@ -2938,7 +2938,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 967b2f559062c6f4f8023a26702733d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerMC: {fileID: 8039632567824340715}
+  playerMC: {fileID: 0}
   health: 25
   healthSlider: {fileID: 0}
   damageMultiplyerChest: 1
