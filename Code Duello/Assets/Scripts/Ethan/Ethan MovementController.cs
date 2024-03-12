@@ -42,6 +42,8 @@ public class EthanMovementController : MonoBehaviour
     public bool playerKnockedBack = false;
 
     [SerializeField] private AnimationClip punchClip;
+    [SerializeField] private AnimationClip walkFowardClip;
+    [SerializeField] private AnimationClip walkBackClip;
     [SerializeField] private float punchClipTime;
     [SerializeField] private float hitCheckDelay;
     [SerializeField] private float pushbackForce = 1f;
@@ -153,10 +155,10 @@ public class EthanMovementController : MonoBehaviour
                 controllerAnim.SetFloat("WalkDirection", playerMoveX);
             }
 
-            else if (playerMoveX > -0.3 && playerMoveX < 0.3 && isGrounded && !isPunching)
-            {
-                FightStance();
-            }
+            //else if (playerMoveX > -0.3 && playerMoveX < 0.3 && isGrounded && !isPunching)
+            //{
+            //    FightStance();
+            //}
 
             if (invertContorls)
             {
