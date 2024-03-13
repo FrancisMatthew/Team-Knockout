@@ -43,15 +43,6 @@ public class SpawnManager : MonoBehaviour
         
     }
 
-    public void OnPlayerJoined(PlayerInput playerInput) 
-    {
-       
-    }
-
-    public void OnSpawn() 
-    {
-        
-    }
 
     public void SpawnPlayer() 
     {

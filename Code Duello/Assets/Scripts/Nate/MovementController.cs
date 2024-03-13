@@ -81,7 +81,7 @@ public class MovementController : MonoBehaviour
         if (!disablePlayerInput_Debug)
         {
             RaycastHit overlap;
-            if (Physics.Raycast(hitCastPoint.position, hitCastPoint.forward, out overlap, overlapRange))
+            if (Physics.Raycast(hitCastPoint.position, hitCastPoint.forward, out overlap, overlapRange))                        //Raycast checks to see if the players are colliding
             {
                 if (overlap.transform.gameObject.tag == "Player")
                 {
@@ -97,7 +97,7 @@ public class MovementController : MonoBehaviour
         if (!disablePlayerInput_Debug) 
         {
             RaycastHit hit;
-            if (Physics.Raycast(hitCastPoint.position, hitCastPoint.forward, out hit, hitRange))
+            if (Physics.Raycast(hitCastPoint.position, hitCastPoint.forward, out hit, hitRange))                // Raycast checks to see if player is 
             {
                 if (hit.transform.gameObject.tag == "Player")
                 {
@@ -120,14 +120,14 @@ public class MovementController : MonoBehaviour
     {
         if (isGameActive)
         {
-            isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+            isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);                 // Checks if player is Grounded
 
             if (isGrounded && Velocity.y < 0)
             {
-                Velocity.y = -2f;
+                Velocity.y = -2f;                                                                               // applies gravity if player is not grounded
             }
 
-            move = transform.forward * playerMoveX;
+            move = transform.forward * playerMoveX;                                                             // moves player
 
 
             if (playerMoveX < -0.3 && isGrounded && !isPunching)
@@ -145,7 +145,7 @@ public class MovementController : MonoBehaviour
 
             if (invertContorls)
             {
-                if (!arePlayersColliding)
+                if (!arePlayersColliding)                                                                       // If players are colliding then the player can only walk backwards so that they can't push the other player
                 {
                     controller.Move(-move * speed * Time.deltaTime);
                 }
@@ -156,7 +156,7 @@ public class MovementController : MonoBehaviour
             }
             else
             {
-                if (!arePlayersColliding)
+                if (!arePlayersColliding)                                                                       // If players are colliding then the player can only walk backwards so that they can't push the other player
                 {
                     controller.Move(move * speed * Time.deltaTime);
                 }
@@ -168,10 +168,10 @@ public class MovementController : MonoBehaviour
         }
         else 
         {
-            if (controllerAnim.GetBool("isGameActive") == true) 
+            if (controllerAnim.GetBool("isGameActive") == true)                                                 // When game finishes a check is run to see if the isGameActive animation bool is true and sets it to false if it is true
             {
                 controllerAnim.SetBool("isGameActive", false);
-                FightStance();
+                FightStance();                                                                                  // sets the player anim back to the fight stance
             }
             
         }
@@ -179,32 +179,32 @@ public class MovementController : MonoBehaviour
         controller.Move(Velocity * Time.deltaTime);
     }
     
-    private void OnJump()
+    private void OnJump()                                                                                       // OnJump function from the input system
     {
         if (isGrounded && isGameActive)
         {
             Velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
     }
-    private void OnMove(InputValue inputValue)
+    private void OnMove(InputValue inputValue)                                                                  // OnMove function from the input system
     {
-        Vector2 inputValVec = inputValue.Get<Vector2>();
+        Vector2 inputValVec = inputValue.Get<Vector2>();                                                        // Gets controller joystick input
         playerMoveX = inputValVec.x;
     }
 
-    private void OnLightAttack() 
+    private void OnLightAttack()                                                                                // OnLightAttack function from the input system
     {
         if (!isPunching && isGameActive)
         {
-            isPunching = true;
-            Attack();
-            playSoundAfterTimeCoroutine = StartCoroutine(PlaySound(hitCheckDelay, attackVolume, attackSound));
-            Invoke("makePunchingFalse", punchClipTime);
-            Invoke("SendHitCheck", hitCheckDelay);
+            isPunching = true;                                                                                  // Sets isPunching bool to true so players can't repeatedly spam light Attacks
+            Attack();                                                                                           // Triggers Attack animation function
+            playSoundAfterTimeCoroutine = StartCoroutine(PlaySound(hitCheckDelay, attackVolume, attackSound));  // Plays sound after a specific amount of time
+            Invoke("makePunchingFalse", punchClipTime);                                                         // Triggers makePunchingFalse function after a specific amount of time
+            Invoke("SendHitCheck", hitCheckDelay);                                                              // Triggers SendHitCheck function after a specific amount of time
         }
     }
 
-    private void OnBlock(InputValue inputValue) 
+    private void OnBlock(InputValue inputValue)                                                                 // OnBlock function from the input system
     {
         if (inputValue.Get<float>() > 0 && isGameActive) 
         {
@@ -220,11 +220,11 @@ public class MovementController : MonoBehaviour
 
     }
 
-    public void ApplyKnockback() 
+    public void ApplyKnockback()                                                                                // OnLightAttack function from the input system
     {
-        if (invertContorls) 
+        if (invertContorls)                                                                                     // Checks if conrtols are inverted
         {
-            Velocity.y = Mathf.Sqrt(jumpHeight * -0.5f * gravity);
+            Velocity.y = Mathf.Sqrt(jumpHeight * -0.5f * gravity);                                              // applys knockback to player getting hit
             playerKnockedBack = true;
             Velocity.x = Mathf.Sqrt(pushbackForce * -2f * gravity);
             Invoke("ResetXVelocity", 0.3f);
@@ -238,35 +238,35 @@ public class MovementController : MonoBehaviour
         }
     }
 
-    private void ResetXVelocity() 
+    private void ResetXVelocity()                                                                               // Resets X velocity after player is knocked back
     {
         Velocity.x = 0;
         playerKnockedBack = false;
     }
 
-    public void DamageAnim() 
+    public void DamageAnim()                                                                                                           
     {
-        controllerAnim.SetTrigger("TakeDamage");
-        playSoundAfterTimeCoroutine = StartCoroutine(PlaySound(0, takeDamageVolume, takeDamageSound));
-        RumblePulse(0.7f, 0.7f, 0.3f);
+        controllerAnim.SetTrigger("TakeDamage");                                                                // Triggers TakeDamage animation
+        playSoundAfterTimeCoroutine = StartCoroutine(PlaySound(0, takeDamageVolume, takeDamageSound));          // Plays sound after certain amount of time       
+        RumblePulse(0.7f, 0.7f, 0.3f);                                                                          // Triggers function to vibrate controller       
     }
 
-    public void FightStance() 
+    public void FightStance()                                                                                   // Activates fighStance animation       
     {
         controllerAnim.SetBool("isWalkingRight", false);
         controllerAnim.SetBool("isWalkingLeft", false);
     }
-    public void WalkLeft()
+    public void WalkLeft()                                                                                       // Activates WalkLeft animation    
     {
         controllerAnim.SetBool("isWalkingLeft", true);
     }
 
-    public void WalkRight()
+    public void WalkRight()                                                                                      // Activates WalkRight animation    
     {
         controllerAnim.SetBool("isWalkingRight", true);
     }
 
-    public void Attack()
+    public void Attack()                                                                                         // Activates Attack animation    
     {
         controllerAnim.SetTrigger("Punching");
         isBlocking = false;
@@ -279,7 +279,7 @@ public class MovementController : MonoBehaviour
         isPunching = false;
     }
 
-    public void SendHitCheck() 
+    public void SendHitCheck()                                                                                  // If other player is in range then they'll take damage depending on the type of hit    
     {
         if(enemyPHC != null)
         {
@@ -298,7 +298,7 @@ public class MovementController : MonoBehaviour
         }
     }
 
-    public void SetBlocking()
+    public void SetBlocking()                                                                                  // sets blocking to true or flase   
     {
         if (isBlocking)
         {
@@ -308,23 +308,23 @@ public class MovementController : MonoBehaviour
         {
             isBlocking = true;
         }
-        controllerAnim.SetBool("isBlocking", isBlocking);
+        controllerAnim.SetBool("isBlocking", isBlocking);                                                    // Sets the aniomation bool to the same as isBlocking                                                       
     }
 
 
-    public void KillPlayer() 
+    public void KillPlayer()                                                                                 // Sets isGameActive to false and the isDead animation bool to true
     {
         isGameActive = false;
         controllerAnim.SetBool("isDead", true);
     }
 
-    private void RumblePulse(float lowFrequency, float highFrequency, float duration) 
+    private void RumblePulse(float lowFrequency, float highFrequency, float duration)                       // Starts vibrating controller and starts coroutine to stop the vibration after a certain time
     {
         playerGP.SetMotorSpeeds(lowFrequency, highFrequency);
         stopRumbleAfterTimeCoroutine = StartCoroutine(StopRumble(0.3f));
     }
 
-    private IEnumerator StopRumble(float duration) 
+    private IEnumerator StopRumble(float duration)                                                         // stop the vibration after a certain time
     {
         float elapsedTime = 0f;
         while(elapsedTime < duration) 
@@ -335,7 +335,7 @@ public class MovementController : MonoBehaviour
         playerGP.SetMotorSpeeds(0f, 0f);
     }
 
-    private IEnumerator PlaySound(float delay, float volume,AudioClip clip)
+    private IEnumerator PlaySound(float delay, float volume,AudioClip clip)                             // Plays a certain sound at the desired volume after a certain time
     {
         float elapsedTime = 0f;
         while (elapsedTime < delay)
