@@ -10,10 +10,12 @@ public class MovementAnim : MonoBehaviour
     private float lerpedVel;
 
     public Animator chaAnimator;
+    public MovementController chaMove;
 
     private void Awake()
     {
         chaAnimator = GetComponent<Animator>();
+        chaMove = GetComponent<MovementController>();
     }
 
     // Update is called once per frame
@@ -25,9 +27,14 @@ public class MovementAnim : MonoBehaviour
         velocity = (transform.position - previousPos) / Time.deltaTime;
         previousPos = transform.position;
 
-        lerpedVel = Mathf.Lerp(lerpedVel, velocity.normalized.x, 10f * Time.deltaTime);
-        Debug.Log(lerpedVel);
+        // Invert for player 2
+        if (chaMove.invertContorls == true)
+        {
+            velocity.x = -velocity.x;
+        }
 
+        lerpedVel = Mathf.Lerp(lerpedVel, velocity.normalized.x, 10f * Time.deltaTime);
+        
         chaAnimator.SetFloat("E_LateralDir", lerpedVel);
     }
 }
