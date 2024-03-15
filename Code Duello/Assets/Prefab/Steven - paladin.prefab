@@ -2744,6 +2744,7 @@ GameObject:
   - component: {fileID: 8039632567824340715}
   - component: {fileID: 8797729248193035768}
   - component: {fileID: 2221757420552040035}
+  - component: {fileID: -8418636383594945421}
   m_Layer: 0
   m_Name: Steven - paladin
   m_TagString: Player
@@ -2849,7 +2850,7 @@ MonoBehaviour:
     m_ActionName: Spawning/Spawn[/DualShock4GamepadHID/buttonSouth,/XInputControllerWindows/buttonSouth,/DualShock4GamepadHID1/buttonSouth]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: 2a762b65-244e-4877-b6a9-876a9549c6c8
+  m_DefaultActionMap: Gameplay
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!143 &6269350279262569289
@@ -2943,6 +2944,7 @@ MonoBehaviour:
   healthSlider: {fileID: 0}
   damageMultiplyerChest: 1
   damageMultiplyerHead: 1.5
+  blockMultiplyer: 0.2
 --- !u!136 &2221757420552040035
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2966,6 +2968,19 @@ CapsuleCollider:
   m_Height: 2.0244784
   m_Direction: 1
   m_Center: {x: 0, y: 0.9542453, z: 0}
+--- !u!114 &-8418636383594945421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7911298940396307012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4f6b773d3b6899488b678b8475e2c7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chaAnimator: {fileID: 0}
 --- !u!1 &7977121500811455020
 GameObject:
   m_ObjectHideFlags: 0
