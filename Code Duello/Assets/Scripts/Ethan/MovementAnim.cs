@@ -21,6 +21,8 @@ public class MovementAnim : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        #region Movement
+
         // Get the movement direction of the character.
         // x = horizontal
         // y = vertical
@@ -34,7 +36,14 @@ public class MovementAnim : MonoBehaviour
         }
 
         lerpedVel = Mathf.Lerp(lerpedVel, velocity.normalized.x, 10f * Time.deltaTime);
-        
         chaAnimator.SetFloat("E_LateralDir", lerpedVel);
+
+        #endregion
+
+        // Fire light attack
+        if (chaMove.isPunching)
+        {
+
+        }
     }
 }
