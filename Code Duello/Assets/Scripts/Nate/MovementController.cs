@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -326,6 +327,12 @@ public class MovementController : MonoBehaviour
     {
         isGameActive = false;
         controllerAnim.SetBool("isDead", true);
+        controllerAnim.SetLayerWeight(0, 0);
+        controllerAnim.SetLayerWeight(1, 0);
+        controllerAnim.SetLayerWeight(2, 0);
+        controllerAnim.SetLayerWeight(3, 0);
+        disablePlayerInput = true;
+        isGrounded = false;
     }
 
 }
