@@ -36,31 +36,22 @@ public class SpawnManager : MonoBehaviour
     void Start()
     {
 
-        PlayerPrefs.SetInt("playerOneChoice", playerOneChoice);
-        PlayerPrefs.SetInt("playerTwoChoice", playerTwoChoice);
+        playerOneChoice = PlayerPrefs.GetInt("playerOneChoice", playerOneChoice);
+        playerTwoChoice = PlayerPrefs.GetInt("playerTwoChoice", playerTwoChoice);
         player1Prefab = characters[playerOneChoice];
         player2Prefab = characters[playerTwoChoice];
 
         SpawnPlayer();
-        Invoke("SpawnPlayer", 0.3f);
+        SpawnPlayer();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
 
     public void SpawnPlayer() 
     {
-        Debug.Log("OPJ" + "PC" + playerCount);
         if (playerCount == 0)
         {
             p1 = PlayerInput.Instantiate(player1Prefab, controlScheme: "Gamepad", pairWithDevice: Gamepad.all[playerCount]);
             p1.name = "player 1";
             playerCount++;
-            Debug.Log("PC" + playerCount);
             SetPlayDefaults(p1.gameObject);
         }
         else if (playerCount == 1)
@@ -68,7 +59,6 @@ public class SpawnManager : MonoBehaviour
             p2 = PlayerInput.Instantiate(player2Prefab, controlScheme: "Gamepad", pairWithDevice: Gamepad.all[playerCount]);
             p2.name = "player 2";
             playerCount++;
-            Debug.Log("PC" + playerCount);
             SetPlayDefaults(p2.gameObject);
         }
     }
@@ -78,24 +68,23 @@ public class SpawnManager : MonoBehaviour
     {
         if (playerCount == 1)
         {
-            Debug.Log("Spawn 1");
             player.transform.rotation = player1SpawnLoc.rotation;
+            player.transform.position = player1SpawnLoc.position;
             PlayerHealthClass player1HC = player.GetComponent<PlayerHealthClass>();
             player1HC.healthSlider = player1HSlider;
             MovementController player1MC = player.GetComponent<MovementController>();
             player1MC.playerVal = 0;
-            player.transform.position = player1SpawnLoc.position;
         }
         else if (playerCount == 2)
         {
             Debug.Log("Spawn 2");
             player.transform.rotation = player2SpawnLoc.rotation;
+            player.transform.position = player2SpawnLoc.position;
             PlayerHealthClass player2HC = player.GetComponent<PlayerHealthClass>();
             player2HC.healthSlider = player2HSlider;
             MovementController player2MC = player.GetComponent<MovementController>();
             player2MC.invertContorls = true;
             player2MC.playerVal = 1;
-            player.transform.position = player2SpawnLoc.position;
         }
     }
 }

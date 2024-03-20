@@ -6,27 +6,28 @@ public class SceneLoader : MonoBehaviour
 {
     public string sceneName;
 
-    public int characterOneChoice;
+    public bool isPlayerOneReady = false, isPlayerTwoReady = false;
 
-    [SerializeField] private GameObject[] characters;
 
-    [SerializeField] private GameObject player1PrefabTest;
-    [SerializeField] private GameObject player2PrefabTest;
-    [SerializeField] private int playerOneChoice, playerTwoChoice;
+    private void Update()
+    {
+        if(isPlayerOneReady && isPlayerTwoReady) 
+        {
+            isPlayerOneReady = false;
+            isPlayerTwoReady = false;
 
+            StartGame();
+
+        }
+    }
 
     public void OnChangeScene() 
     {
-
-        //SpawnManager.player1Prefab = player1PrefabTest;
-        //SpawnManager.player2Prefab = player2PrefabTest;
         SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
     }
 
-    public void OnStartGame() 
+    public void StartGame() 
     {
-        PlayerPrefs.SetInt("playerOneChoice", playerOneChoice);
-        PlayerPrefs.SetInt("playerTwoChoice", playerTwoChoice);
         SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
     }
 

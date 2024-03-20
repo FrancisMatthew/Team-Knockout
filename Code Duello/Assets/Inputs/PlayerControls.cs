@@ -158,6 +158,74 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""CharacterSelection"",
+            ""id"": ""aed1efa2-a308-4bca-a1c0-d80eb36126a6"",
+            ""actions"": [
+                {
+                    ""name"": ""NextCharacter"",
+                    ""type"": ""Button"",
+                    ""id"": ""bfe5c45c-ebd8-48c4-b9e2-c0f1aef193e5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PreviousCharacter"",
+                    ""type"": ""Button"",
+                    ""id"": ""8dd40299-e113-44a9-810d-ef6a97557997"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SelectCharacter"",
+                    ""type"": ""Button"",
+                    ""id"": ""da1dc74e-b4e0-4bf7-9c04-4a187f1e2b0b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""71b100d1-14f0-4d3f-b94f-9812c1917d5a"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextCharacter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1b4f96e2-4975-41da-b7f6-c64dc983162c"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PreviousCharacter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""13ef004b-6bbc-4295-8ae2-3d33bd2026fd"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectCharacter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -172,6 +240,11 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Testing = asset.FindActionMap("Testing", throwIfNotFound: true);
         m_Testing_Spawn = m_Testing.FindAction("Spawn", throwIfNotFound: true);
         m_Testing_ChangeScene = m_Testing.FindAction("ChangeScene", throwIfNotFound: true);
+        // CharacterSelection
+        m_CharacterSelection = asset.FindActionMap("CharacterSelection", throwIfNotFound: true);
+        m_CharacterSelection_NextCharacter = m_CharacterSelection.FindAction("NextCharacter", throwIfNotFound: true);
+        m_CharacterSelection_PreviousCharacter = m_CharacterSelection.FindAction("PreviousCharacter", throwIfNotFound: true);
+        m_CharacterSelection_SelectCharacter = m_CharacterSelection.FindAction("SelectCharacter", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -353,6 +426,68 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         }
     }
     public TestingActions @Testing => new TestingActions(this);
+
+    // CharacterSelection
+    private readonly InputActionMap m_CharacterSelection;
+    private List<ICharacterSelectionActions> m_CharacterSelectionActionsCallbackInterfaces = new List<ICharacterSelectionActions>();
+    private readonly InputAction m_CharacterSelection_NextCharacter;
+    private readonly InputAction m_CharacterSelection_PreviousCharacter;
+    private readonly InputAction m_CharacterSelection_SelectCharacter;
+    public struct CharacterSelectionActions
+    {
+        private @PlayerControls m_Wrapper;
+        public CharacterSelectionActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @NextCharacter => m_Wrapper.m_CharacterSelection_NextCharacter;
+        public InputAction @PreviousCharacter => m_Wrapper.m_CharacterSelection_PreviousCharacter;
+        public InputAction @SelectCharacter => m_Wrapper.m_CharacterSelection_SelectCharacter;
+        public InputActionMap Get() { return m_Wrapper.m_CharacterSelection; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(CharacterSelectionActions set) { return set.Get(); }
+        public void AddCallbacks(ICharacterSelectionActions instance)
+        {
+            if (instance == null || m_Wrapper.m_CharacterSelectionActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_CharacterSelectionActionsCallbackInterfaces.Add(instance);
+            @NextCharacter.started += instance.OnNextCharacter;
+            @NextCharacter.performed += instance.OnNextCharacter;
+            @NextCharacter.canceled += instance.OnNextCharacter;
+            @PreviousCharacter.started += instance.OnPreviousCharacter;
+            @PreviousCharacter.performed += instance.OnPreviousCharacter;
+            @PreviousCharacter.canceled += instance.OnPreviousCharacter;
+            @SelectCharacter.started += instance.OnSelectCharacter;
+            @SelectCharacter.performed += instance.OnSelectCharacter;
+            @SelectCharacter.canceled += instance.OnSelectCharacter;
+        }
+
+        private void UnregisterCallbacks(ICharacterSelectionActions instance)
+        {
+            @NextCharacter.started -= instance.OnNextCharacter;
+            @NextCharacter.performed -= instance.OnNextCharacter;
+            @NextCharacter.canceled -= instance.OnNextCharacter;
+            @PreviousCharacter.started -= instance.OnPreviousCharacter;
+            @PreviousCharacter.performed -= instance.OnPreviousCharacter;
+            @PreviousCharacter.canceled -= instance.OnPreviousCharacter;
+            @SelectCharacter.started -= instance.OnSelectCharacter;
+            @SelectCharacter.performed -= instance.OnSelectCharacter;
+            @SelectCharacter.canceled -= instance.OnSelectCharacter;
+        }
+
+        public void RemoveCallbacks(ICharacterSelectionActions instance)
+        {
+            if (m_Wrapper.m_CharacterSelectionActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(ICharacterSelectionActions instance)
+        {
+            foreach (var item in m_Wrapper.m_CharacterSelectionActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_CharacterSelectionActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public CharacterSelectionActions @CharacterSelection => new CharacterSelectionActions(this);
     public interface IGameplayActions
     {
         void OnJump(InputAction.CallbackContext context);
@@ -364,5 +499,11 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     {
         void OnSpawn(InputAction.CallbackContext context);
         void OnChangeScene(InputAction.CallbackContext context);
+    }
+    public interface ICharacterSelectionActions
+    {
+        void OnNextCharacter(InputAction.CallbackContext context);
+        void OnPreviousCharacter(InputAction.CallbackContext context);
+        void OnSelectCharacter(InputAction.CallbackContext context);
     }
 }
