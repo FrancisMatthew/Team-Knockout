@@ -154,8 +154,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneName: GameLevel
+  characterOneChoice: 0
+  characters:
+  - {fileID: 7911298940396307012, guid: 2df01aad4de963647ae654899ed0c788, type: 3}
   player1PrefabTest: {fileID: 7911298940396307012, guid: 2df01aad4de963647ae654899ed0c788, type: 3}
   player2PrefabTest: {fileID: 7911298940396307012, guid: 2df01aad4de963647ae654899ed0c788, type: 3}
+  playerOneChoice: 0
+  playerTwoChoice: 0
 --- !u!4 &348468190
 Transform:
   m_ObjectHideFlags: 0

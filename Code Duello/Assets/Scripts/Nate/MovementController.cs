@@ -86,6 +86,7 @@ public class MovementController : MonoBehaviour
                 if (overlap.transform.gameObject.tag == "Player")
                 {
                     arePlayersColliding = true;
+                    Debug.Log("Colliding");
                 }
             }
             else

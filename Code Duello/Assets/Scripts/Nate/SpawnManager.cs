@@ -11,12 +11,17 @@ public class SpawnManager : MonoBehaviour
     [Header("Player Refs")][Space]
 
     [SerializeField] private PlayerInput p1;
-    public static GameObject player1Prefab;
-    [SerializeField] private GameObject player1PrefabShow;
+    [SerializeField] private GameObject player1Prefab;
     [SerializeField] private PlayerInput p2;
-    public static GameObject player2Prefab;
-    [SerializeField] private GameObject player2PrefabShow;
+    [SerializeField] private GameObject player2Prefab;
     [SerializeField] private int playerCount = 0;
+
+
+
+    [SerializeField] private GameObject[] characters;
+    [SerializeField] private int playerOneChoice, playerTwoChoice;
+
+
 
     [Header("Player Health Sliders")][Space]
 
@@ -30,11 +35,14 @@ public class SpawnManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        player1PrefabShow = player1Prefab;
-        player2PrefabShow = player2Prefab;
+
+        PlayerPrefs.SetInt("playerOneChoice", playerOneChoice);
+        PlayerPrefs.SetInt("playerTwoChoice", playerTwoChoice);
+        player1Prefab = characters[playerOneChoice];
+        player2Prefab = characters[playerTwoChoice];
+
         SpawnPlayer();
-        SpawnPlayer();
-        //Invoke("SpawnPlayers", 0.3f);
+        Invoke("SpawnPlayer", 0.3f);
     }
 
     // Update is called once per frame
