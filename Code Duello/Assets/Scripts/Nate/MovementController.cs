@@ -198,10 +198,22 @@ public class MovementController : MonoBehaviour
         if (!isPunching && isGameActive)
         {
             isPunching = true;                                                                                  // Sets isPunching bool to true so players can't repeatedly spam light Attacks
-            Attack();                                                                                           // Triggers Attack animation function
+            LightAttack();                                                                                           // Triggers Attack animation function
             playSoundAfterTimeCoroutine = StartCoroutine(PlaySound(hitCheckDelay, attackVolume, attackSound));  // Plays sound after a specific amount of time
             Invoke("makePunchingFalse", punchClipTime);                                                         // Triggers makePunchingFalse function after a specific amount of time
             Invoke("SendHitCheck", hitCheckDelay);                                                              // Triggers SendHitCheck function after a specific amount of time
+        }
+    }
+
+    private void OnHeavyAttack()
+    {
+        if (!isPunching && isGameActive)
+        {
+            isPunching = true;
+            HeavyAttack();
+            playSoundAfterTimeCoroutine = StartCoroutine(PlaySound(hitCheckDelay, attackVolume, attackSound));
+            Invoke("makePunchingFalse", punchClipTime);
+            Invoke("SendHitCheck", hitCheckDelay);
         }
     }
 
@@ -267,7 +279,14 @@ public class MovementController : MonoBehaviour
         controllerAnim.SetBool("isWalkingRight", true);
     }
 
-    public void Attack()                                                                                         // Activates Attack animation    
+    public void LightAttack()                                                                                         // Activates Light Attack animation    
+    {
+        controllerAnim.SetTrigger("Punching");
+        isBlocking = false;
+        controllerAnim.SetBool("isBlocking", isBlocking);
+    }
+
+    public void HeavyAttack()                                                                                          // Activates Heavy Attack animation    
     {
         controllerAnim.SetTrigger("Punching");
         isBlocking = false;
