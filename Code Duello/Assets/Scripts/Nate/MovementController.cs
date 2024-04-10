@@ -28,10 +28,14 @@ public class MovementController : MonoBehaviour
     [SerializeField] private float overlapRange = 0.4f;
     [SerializeField] private bool isPunching;
     [SerializeField] private bool playerKnockedBack = false;
+
+    [SerializeField] private ScriptableAnimation scriptableAnimation;
+    
     [SerializeField] private AnimationClip punchClip;
     [SerializeField] private AnimationClip walkFowardClip;
     [SerializeField] private AnimationClip walkBackClip;
-    [SerializeField] private float punchClipTime;
+    [SerializeField] private float lightAttackClipTime;
+    [SerializeField] private float heavyAttackClipTime;
     [SerializeField] private float hitCheckDelay;
     [SerializeField] private float pushbackForce = 1f;
 
@@ -66,9 +70,13 @@ public class MovementController : MonoBehaviour
         speaker = gameObject.GetComponent<AudioSource>();
         playerGP = Gamepad.all[playerVal];
         controllerAnim = gameObject.GetComponent<Animator>();
+        AnimationState punchState = controllerAnim.GetCurrentAnimatorStateInfo(0).
+        punchState.clip
         controllerAnim.SetBool("isGameActive", true);
         
-        punchClipTime = punchClip.length;
+        lightAttackClipTime = scriptableAnimation.lightAttackClip.length;
+        heavyAttackClipTime = scriptableAnimation.heavyAttackClip.length;
+
         if (invertContorls) 
         { 
             controllerAnim.SetFloat("walkLeftSpeed", -1);
@@ -200,7 +208,7 @@ public class MovementController : MonoBehaviour
             isPunching = true;                                                                                  // Sets isPunching bool to true so players can't repeatedly spam light Attacks
             LightAttack();                                                                                           // Triggers Attack animation function
             playSoundAfterTimeCoroutine = StartCoroutine(PlaySound(hitCheckDelay, attackVolume, attackSound));  // Plays sound after a specific amount of time
-            Invoke("makePunchingFalse", punchClipTime);                                                         // Triggers makePunchingFalse function after a specific amount of time
+            Invoke("makePunchingFalse", lightAttackClipTime);                                                         // Triggers makePunchingFalse function after a specific amount of time
             Invoke("SendHitCheck", hitCheckDelay);                                                              // Triggers SendHitCheck function after a specific amount of time
         }
     }
@@ -212,7 +220,7 @@ public class MovementController : MonoBehaviour
             isPunching = true;
             HeavyAttack();
             playSoundAfterTimeCoroutine = StartCoroutine(PlaySound(hitCheckDelay, attackVolume, attackSound));
-            Invoke("makePunchingFalse", punchClipTime);
+            Invoke("makePunchingFalse", heavyAttackClipTime);
             Invoke("SendHitCheck", hitCheckDelay);
         }
     }
@@ -281,14 +289,14 @@ public class MovementController : MonoBehaviour
 
     public void LightAttack()                                                                                         // Activates Light Attack animation    
     {
-        controllerAnim.SetTrigger("Punching");
+        controllerAnim.SetTrigger("LightAttack");
         isBlocking = false;
         controllerAnim.SetBool("isBlocking", isBlocking);
     }
 
     public void HeavyAttack()                                                                                          // Activates Heavy Attack animation    
     {
-        controllerAnim.SetTrigger("Punching");
+        controllerAnim.SetTrigger("HeavyAttack");
         isBlocking = false;
         controllerAnim.SetBool("isBlocking", isBlocking);
     }

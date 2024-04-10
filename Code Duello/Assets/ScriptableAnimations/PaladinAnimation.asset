@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4513b9e6508d5894b8e9b9c814ddf8b1, type: 3}
+  m_Name: PaladinAnimation
+  m_EditorClassIdentifier: 
+  lightAttackClip: {fileID: 7400000, guid: 34d15b4ddd774044ba28605eae00a0ca, type: 2}
+  takeDamageClip: {fileID: 7400000, guid: b443e01d9c2c1d24cabd5c76e9b424c2, type: 2}
+  heavyAttackClip: {fileID: 7400000, guid: 9df34ece68f868a41a18de35fee1c324, type: 2}
+  walkFowardClip: {fileID: 7400000, guid: 986a6c10055ddc340ab54afac49f42b5, type: 2}
+  walkBackClip: {fileID: 7400000, guid: 8bcb6b5e5d8c1614f8dde5ee62c83a57, type: 2}
+  blockClip: {fileID: 7400000, guid: ac60b26184687ba44989c85d75b77518, type: 2}
+  deathClip: {fileID: 7400000, guid: 4b3e25ca9b4db3e4b830653430639ca0, type: 2}

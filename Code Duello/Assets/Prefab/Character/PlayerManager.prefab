@@ -102,6 +102,9 @@ MonoBehaviour:
   p2: {fileID: 0}
   player2Prefab: {fileID: 7911298940396307012, guid: 2df01aad4de963647ae654899ed0c788, type: 3}
   playerCount: 0
+  characters: []
+  playerOneChoice: 0
+  playerTwoChoice: 0
   player1HSlider: {fileID: 0}
   player2HSlider: {fileID: 0}
   player1SpawnLoc: {fileID: 0}
