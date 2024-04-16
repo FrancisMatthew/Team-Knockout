@@ -31,26 +31,26 @@ public class MovementController : MonoBehaviour
 
     [SerializeField] private ScriptableAnimation scriptableAnimation;
     
+    public float lightAttackClipTime;
+    public float heavyAttackClipTime;
     [SerializeField] private AnimationClip punchClip;
     [SerializeField] private AnimationClip walkFowardClip;
     [SerializeField] private AnimationClip walkBackClip;
-    [SerializeField] private float lightAttackClipTime;
-    [SerializeField] private float heavyAttackClipTime;
     [SerializeField] private float hitCheckDelay;
     [SerializeField] private float pushbackForce = 1f;
 
     [Header("Audio")][Space]
 
     [SerializeField] private AudioSource speaker;
-    [SerializeField] private AudioClip attackSound;
+    public AudioClip attackSound;
+    public AudioClip takeDamageSound;
     [SerializeField] private float attackVolume;
-    [SerializeField] private AudioClip takeDamageSound;
     [SerializeField] private float takeDamageVolume;
     private Coroutine playSoundAfterTimeCoroutine;
 
     [Header("CharacterController")][Space]
 
-    [SerializeField] private CharacterController controller;
+    public CharacterController controller;
     [SerializeField] private float speed = 12f;
     [SerializeField] private float gravity = -9.81f;
     [SerializeField] private float jumpHeight = 1.5f;
@@ -67,15 +67,12 @@ public class MovementController : MonoBehaviour
 
     void Start()
     {
+        controller = GetComponent<CharacterController>();
         speaker = gameObject.GetComponent<AudioSource>();
         playerGP = Gamepad.all[playerVal];
         controllerAnim = gameObject.GetComponent<Animator>();
-        AnimationState punchState = controllerAnim.GetCurrentAnimatorStateInfo(0).
-        punchState.clip
         controllerAnim.SetBool("isGameActive", true);
         
-        lightAttackClipTime = scriptableAnimation.lightAttackClip.length;
-        heavyAttackClipTime = scriptableAnimation.heavyAttackClip.length;
 
         if (invertContorls) 
         { 
@@ -86,43 +83,38 @@ public class MovementController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!disablePlayerInput_Debug)
+        RaycastHit overlap;
+        Debug.DrawRay(hitCastPoint.position, hitCastPoint.forward, Color.red);
+        if (Physics.Raycast(hitCastPoint.position, hitCastPoint.forward, out overlap, overlapRange))                        //Raycast checks to see if the players are colliding
         {
-            RaycastHit overlap;
-            if (Physics.Raycast(hitCastPoint.position, hitCastPoint.forward, out overlap, overlapRange))                        //Raycast checks to see if the players are colliding
+            if (overlap.transform.gameObject.tag == "Player")
             {
-                if (overlap.transform.gameObject.tag == "Player")
-                {
-                    arePlayersColliding = true;
-                    Debug.Log("Colliding");
-                }
-            }
-            else
-            {
-                arePlayersColliding = false;
+                arePlayersColliding = true;
+                Debug.Log("Colliding");
             }
         }
-
-        if (!disablePlayerInput_Debug) 
+        else
         {
-            RaycastHit hit;
-            if (Physics.Raycast(hitCastPoint.position, hitCastPoint.forward, out hit, hitRange))                // Raycast checks to see if player is 
+            arePlayersColliding = false;
+        }
+
+        RaycastHit hit;
+        if (Physics.Raycast(hitCastPoint.position, hitCastPoint.forward, out hit, hitRange))                // Raycast checks to see if player is 
+        {
+            if (hit.transform.gameObject.tag == "Player")
             {
-                if (hit.transform.gameObject.tag == "Player")
+                isEnemyInRange = true;
+                if (enemyPHC == null)
                 {
-                    isEnemyInRange = true;
-                    if (enemyPHC == null)
-                    {
-                        enemyPHC = hit.transform.gameObject.GetComponent<PlayerHealthClass>();
-                    }
+                    enemyPHC = hit.transform.gameObject.GetComponent<PlayerHealthClass>();
                 }
             }
-            else
-            {
-                isEnemyInRange = false;
-                enemyPHC = null;
-            }
-        } 
+        }
+        else
+        {
+            isEnemyInRange = false;
+            enemyPHC = null;
+        }
     }
 
     void Update()

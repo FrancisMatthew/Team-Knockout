@@ -13,6 +13,8 @@ public class ScriptableAnimation : ScriptableObject
     public AnimationClip walkBackClip;
     public AnimationClip blockClip;
     public AnimationClip deathClip;
+    public AnimationClip idleClip;
     // public AnimationClip jumpClip;
-    // public AnimationClip idleClip????;
+    public AudioClip attackSound;
+    public AudioClip impactSound;
 }

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4513b9e6508d5894b8e9b9c814ddf8b1, type: 3}
+  m_Name: Warrior
+  m_EditorClassIdentifier: 
+  lightAttackClip: {fileID: 7400000, guid: a580302342eb9d24da3076000496eac4, type: 2}
+  takeDamageClip: {fileID: 7400000, guid: 20eb2decfb6cfc24b909778e1f19dd86, type: 2}
+  heavyAttackClip: {fileID: 7400000, guid: 12eada1f69301bb4cbfc09a0070694af, type: 2}
+  walkFowardClip: {fileID: 7400000, guid: 669d9763cae48b34189d5cbeddff2529, type: 2}
+  walkBackClip: {fileID: 7400000, guid: 7b6b036c994c1704eaa87e4fae400335, type: 2}
+  blockClip: {fileID: 7400000, guid: a15ad0057a880e64a921a95d9c29d292, type: 2}
+  deathClip: {fileID: 7400000, guid: 8268da6bd018a364b836aa4adef09c8f, type: 2}
+  idleClip: {fileID: 7400000, guid: 1052c0e7ee384a94c9f4e160a1a1c115, type: 2}
+  attackSound: {fileID: 8300000, guid: 508f67a2f303b4c468d3d0a823dc11a5, type: 3}
+  impactSound: {fileID: 8300000, guid: acd32ab753160134f89b901bb1de8cf5, type: 3}

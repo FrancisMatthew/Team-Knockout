@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4513b9e6508d5894b8e9b9c814ddf8b1, type: 3}
-  m_Name: PaladinAnimation
+  m_Name: Paladin
   m_EditorClassIdentifier: 
   lightAttackClip: {fileID: 7400000, guid: 34d15b4ddd774044ba28605eae00a0ca, type: 2}
   takeDamageClip: {fileID: 7400000, guid: b443e01d9c2c1d24cabd5c76e9b424c2, type: 2}
@@ -19,3 +19,6 @@ MonoBehaviour:
   walkBackClip: {fileID: 7400000, guid: 8bcb6b5e5d8c1614f8dde5ee62c83a57, type: 2}
   blockClip: {fileID: 7400000, guid: ac60b26184687ba44989c85d75b77518, type: 2}
   deathClip: {fileID: 7400000, guid: 4b3e25ca9b4db3e4b830653430639ca0, type: 2}
+  idleClip: {fileID: 7400000, guid: 10a4238b48eb1a64594f47a5764473f9, type: 2}
+  attackSound: {fileID: 8300000, guid: 508f67a2f303b4c468d3d0a823dc11a5, type: 3}
+  impactSound: {fileID: 8300000, guid: acd32ab753160134f89b901bb1de8cf5, type: 3}

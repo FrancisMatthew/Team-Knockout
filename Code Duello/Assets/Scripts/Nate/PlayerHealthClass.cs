@@ -29,10 +29,13 @@ public class PlayerHealthClass : MonoBehaviour
 
     private void Update()
     {
-        healthSlider.value = health;
-        if(health <= 0) 
+        if(healthSlider != null) 
         {
-            playerMC.KillPlayer();
+            healthSlider.value = health;
+            if (health <= 0)
+            {
+                playerMC.KillPlayer();
+            }
         }
     }
 

@@ -22,7 +22,7 @@ public class CountdownTimer : MonoBehaviour
 
         if (currentTime <= 0f)
         {
-            Debug.Log("Time's up!");
+            
         }
     }
 

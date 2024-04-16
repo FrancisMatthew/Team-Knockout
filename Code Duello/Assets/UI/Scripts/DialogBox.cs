@@ -12,8 +12,8 @@ public class DialogBox : MonoBehaviour
         background.alpha = 0;
         background.LeanAlpha(1, 0.5f);
 
-        box.localPosition = new Vector3(0, -Screen.height); 
-        box.LeanMoveLocalY(0, 0.5f).setEaseOutExpo().delay = 0.1f;
+        //box.localPosition = new Vector3(0, -Screen.height); 
+        //box.LeanMoveLocalY(0, 0.5f).setEaseOutExpo().delay = 0.1f;
     }
 
     public void CloseDialog(){
