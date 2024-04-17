@@ -39,8 +39,8 @@ public class SwapAnimations : MonoBehaviour
 
         mc.attackSound = characterAnims.attackSound;
         mc.takeDamageSound = characterAnims.impactSound;
-        mc.lightAttackClipTime = characterAnims.lightAttackClip.length;
-        mc.heavyAttackClipTime = characterAnims.heavyAttackClip.length;
+        //mc.lightAttackClipTime = characterAnims.lightAttackClip.length;
+        //mc.heavyAttackClipTime = characterAnims.heavyAttackClip.length;
     }
 
 

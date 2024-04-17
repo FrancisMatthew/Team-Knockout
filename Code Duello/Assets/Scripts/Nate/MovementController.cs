@@ -30,10 +30,11 @@ public class MovementController : MonoBehaviour
     [SerializeField] private bool playerKnockedBack = false;
 
     [SerializeField] private ScriptableAnimation scriptableAnimation;
-    
-    public float lightAttackClipTime;
-    public float heavyAttackClipTime;
-    [SerializeField] private AnimationClip punchClip;
+
+    [SerializeField] private float lightAttackClipTime;
+    [SerializeField] private float heavyAttackClipTime;
+    [SerializeField] private AnimationClip lightAttackClip;
+    [SerializeField] private AnimationClip HeavyAttackClip;
     [SerializeField] private AnimationClip walkFowardClip;
     [SerializeField] private AnimationClip walkBackClip;
     [SerializeField] private float hitCheckDelay;
@@ -72,7 +73,8 @@ public class MovementController : MonoBehaviour
         playerGP = Gamepad.all[playerVal];
         controllerAnim = gameObject.GetComponent<Animator>();
         controllerAnim.SetBool("isGameActive", true);
-        
+        lightAttackClipTime = lightAttackClip.length;
+        heavyAttackClipTime = HeavyAttackClip.length;
 
         if (invertContorls) 
         { 
