@@ -21,7 +21,8 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private GameObject[] characters;
     [SerializeField] private int playerOneChoice, playerTwoChoice;
 
-
+    [Header("Debug Keys")][Space]
+    [SerializeField] private KeyCode spawnKey;
 
     [Header("Player Health Sliders")][Space]
 
@@ -43,12 +44,13 @@ public class SpawnManager : MonoBehaviour
 
         SpawnPlayer();
         SpawnPlayer();
-    }
 
+    }
     public void SpawnPlayer() 
     {
         if (playerCount == 0)
         {
+            Debug.Log(Gamepad.all[playerCount]);
             p1 = PlayerInput.Instantiate(player1Prefab, controlScheme: "Gamepad", pairWithDevice: Gamepad.all[playerCount]);
             p1.name = "player 1";
             playerCount++;
@@ -56,7 +58,8 @@ public class SpawnManager : MonoBehaviour
         }
         else if (playerCount == 1)
         {
-            p2 = PlayerInput.Instantiate(player2Prefab, controlScheme: "Gamepad", pairWithDevice: Gamepad.all[playerCount]);
+            Debug.Log(Gamepad.all[playerCount]);
+            p2 = PlayerInput.Instantiate(player2Prefab, controlScheme: "Gamepad", pairWithDevice: Gamepad.all[playerCount]); 
             p2.name = "player 2";
             playerCount++;
             SetPlayDefaults(p2.gameObject);
